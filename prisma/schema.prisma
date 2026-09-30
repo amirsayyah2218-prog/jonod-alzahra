@@ -1,0 +1,156 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+enum ContentStatus { DRAFT PUBLISHED ARCHIVED }
+enum ContentType { ARTICLE LESSON STORY BOOK ANIMATION MARTYR DAILY MADAHI MADAHI_TEXT DUA ZIYARAT QURAN FIQH NAHJ SAHIFA EVENT ACTIVITY }
+enum SourceKind { OFFICIAL PUBLIC_DOMAIN OPEN_LICENSE USER_SUBMITTED MANUAL }
+enum FaqMarja { KHAMENEI SISTANI MAKAREM }
+
+model Content {
+  id String @id @default(cuid())
+  type ContentType
+  title String
+  slug String @unique
+  excerpt String?
+  body String?
+  mediaUrl String?
+  coverImage String?
+  status ContentStatus @default(DRAFT)
+  sourceId String?
+  source Source? @relation(fields:[sourceId],references:[id])
+  sourceUrl String?
+  license String?
+  publishedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tags ContentTag[]
+}
+model Source {
+  id String @id @default(cuid())
+  name String
+  url String @unique
+  kind SourceKind
+  license String?
+  allowed Boolean @default(false)
+  notes String?
+  createdAt DateTime @default(now())
+  contents Content[]
+}
+model Tag {
+  id String @id @default(cuid())
+  name String @unique
+  contents ContentTag[]
+}
+model ContentTag {
+  contentId String
+  tagId String
+  content Content @relation(fields:[contentId],references:[id],onDelete:Cascade)
+  tag Tag @relation(fields:[tagId],references:[id],onDelete:Cascade)
+  @@id([contentId,tagId])
+}
+model Martyr {
+  id String @id @default(cuid())
+  name String
+  birthDate String?
+  martyrDate String?
+  city String?
+  biography String?
+  quote String?
+  imageUrl String?
+  sourceUrl String?
+  createdAt DateTime @default(now())
+}
+model Prayer {
+  id String @id @default(cuid())
+  title String
+  category String
+  arabic String
+  translation String?
+  source String?
+  audioUrl String?
+  createdAt DateTime @default(now())
+}
+model QuranAyah {
+  id String @id @default(cuid())
+  surahNo Int
+  surahName String
+  ayahNo Int
+  arabic String
+  translation String?
+  audioUrl String?
+  createdAt DateTime @default(now())
+  @@unique([surahNo,ayahNo])
+}
+model FiqhAnswer {
+  id String @id @default(cuid())
+  marja FaqMarja
+  question String
+  answer String
+  sourceUrl String
+  sourceTitle String?
+  category String?
+  keywords String?
+  issueNumber String?
+  sourceName String?
+  verifiedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model CalendarEvent {
+  id String @id @default(cuid())
+  date DateTime
+  jalaliDate String?
+  hijriDate String?
+  title String
+  category String
+  isHoliday Boolean @default(false)
+  description String?
+  sourceUrl String?
+}
+model PrayerTime {
+  id String @id @default(cuid())
+  city String
+  country String
+  date DateTime
+  fajr String
+  sunrise String
+  dhuhr String
+  asr String
+  maghrib String
+  isha String
+  midnight String?
+  method String?
+  @@unique([city,country,date])
+}
+model Activity {
+  id String @id @default(cuid())
+  title String
+  description String?
+  imageUrl String?
+  date DateTime?
+  location String?
+  createdAt DateTime @default(now())
+}
+model Settings {
+  key String @id
+  value String
+  updatedAt DateTime @updatedAt
+}
+model IslamicText {
+  id String @id @default(cuid())
+  work TextWork
+  section String?
+  title String
+  arabic String?
+  translation String?
+  explanation String?
+  source String?
+  sourceUrl String?
+  audioUrl String?
+  number Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([work, number])
+}
+
+enum TextWork { NAHJ_AL_BALAGHA SAHIFA_SAJJADIYA }

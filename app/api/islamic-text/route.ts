@@ -1,0 +1,2 @@
+import {NextRequest,NextResponse} from 'next/server'; import {db} from '@/lib/db';
+export async function GET(req:NextRequest){const work=req.nextUrl.searchParams.get('work'),q=req.nextUrl.searchParams.get('q');const rows=await db.islamicText.findMany({where:{...(work?{work:work as any}:{}),...(q?{OR:[{title:{contains:q,mode:'insensitive'}},{arabic:{contains:q,mode:'insensitive'}},{translation:{contains:q,mode:'insensitive'}}]}:{})},orderBy:[{number:'asc'},{createdAt:'asc'}],take:100});return NextResponse.json(rows)}
