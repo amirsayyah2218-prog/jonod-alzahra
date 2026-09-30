@@ -1,5 +1,10 @@
-generator client { provider = "prisma-client-js" }
-datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
 
 enum ContentStatus { DRAFT PUBLISHED ARCHIVED }
 enum ContentType { ARTICLE LESSON STORY BOOK ANIMATION MARTYR DAILY MADAHI MADAHI_TEXT DUA ZIYARAT QURAN FIQH NAHJ SAHIFA EVENT ACTIVITY }
