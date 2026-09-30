@@ -5,7 +5,7 @@ import Link from "next/link";
 import { CalendarDays, HeartHandshake, Home, Library, Menu, MoonStar, ScrollText, Sparkles } from "lucide-react";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.SITE_URL || 'https://jonod.alzahraa.313'),
+  metadataBase: new URL(process.env.SITE_URL || 'https://example.com'),
   title: "جُنودالزهراء | هیئت فرهنگی جهادی",
   description: "پایگاه فرهنگی، مذهبی، جهادی و تبلیغی جُنودالزهراء در مشهد",
 };
