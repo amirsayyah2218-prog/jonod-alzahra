@@ -193,4 +193,7 @@ model IslamicText {
   @@index([work, number])
 }
 
-enum TextWork { NAHJ_AL_BALAGHA SAHIFA_SAJJADIYA }
+enum TextWork {
+  NAHJ_AL_BALAGHA
+  SAHIFA_SAJJADIYA
+}
